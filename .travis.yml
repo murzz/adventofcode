@@ -5,7 +5,7 @@ compiler:
  - gcc
  - clang
 before_install:
- - sudo apt-get --yes install python-software-properties
+# - sudo apt-get --yes install python-software-properties
  - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
  - sudo add-apt-repository --yes ppa:boost-latest/ppa
  - sudo apt-get --yes update
