@@ -7,3 +7,4 @@ include(mk/Boost.cmake)
 include(mk/add_test.cmake)
 
 add_subdirectory(day1)
+add_subdirectory(day1)
