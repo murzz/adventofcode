@@ -1,4 +1,4 @@
-#define BOOST_TEST_MODULE advent of code day 1 tests
+#define BOOST_TEST_MODULE Advent of Code day 1
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
