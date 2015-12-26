@@ -1,16 +1,14 @@
 language: cpp
-#sudo: required
 dist: trusty
 compiler:
  - gcc
  - clang
 before_install:
-# - sudo apt-get --yes install python-software-properties
  - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
 # - sudo add-apt-repository --yes ppa:boost-latest/ppa
  - sudo apt-get --yes update
 install:
- - sudo apt-get --yes install build-essential wget cmake ninja-build
+ - sudo apt-get --yes install build-essential wget cmake
  #- sudo apt-get --yes install libboost-all-dev
  - sudo apt-get --yes install libboost1.55-all-dev
  - if test "$CC" == "gcc"; then
@@ -19,11 +17,14 @@ install:
      sudo update-alternatives --auto gcc &&
      gcc --version;
    fi
+ - if test "$CC" == "clang"; then
+     sudo apt-get --yes install libc++-dev
+   fi
 before_script:
  - src_dir=$(pwd)
  - build_dir=$(mktemp --directory) 
 script:
-- cmake -H$src_dir -B$build_dir -GNinja
+- cmake -H$src_dir -B$build_dir
 - cmake --build $build_dir --target all
 after_success:
 - cmake --build $build_dir --target test
