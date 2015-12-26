@@ -4,6 +4,6 @@ project(adventofcode)
 
 include(mk/CompilerFlags.cmake)
 include(mk/Boost.cmake)
+include(mk/add_test.cmake)
 
-enable_testing()
 add_subdirectory(day1)
