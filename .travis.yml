@@ -28,7 +28,7 @@ script:
 - cmake --build $build_dir --target all
 after_success:
 #- cmake --build $build_dir --target test
-- cd $build_dir && ctest -j --verbose --output-log "$test_log"
+- cd $build_dir && ctest -j --verbose --output-log "$test_log" && cat "$test_log"
 deploy:
   provider: releases
   api_key:
