@@ -55,6 +55,6 @@ BOOST_AUTO_TEST_CASE(solution)
    const auto solved_position = solved.second;
 
    BOOST_TEST_MESSAGE(
-         boost::format("Santa's floor is floor #%1%, he will enter basement on his %2%(th) move") % solved_floor
+         boost::format("Solution for day #1: Santa's floor is floor #%1%, he will enter basement on his %2%(th) move!") % solved_floor
                % solved_position);
 }

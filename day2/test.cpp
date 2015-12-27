@@ -71,6 +71,6 @@ BOOST_AUTO_TEST_CASE(solution)
    const auto solved_ribbon = solved.second;
 
    BOOST_TEST_MESSAGE(
-         boost::format("Elves need total %1% square feet of wrapping paper and %2% feet of ribbon!") % solved_area
+         boost::format("Solution for day #2: Elves need total %1% square feet of wrapping paper and %2% feet of ribbon!") % solved_area
                % solved_ribbon);
 }
