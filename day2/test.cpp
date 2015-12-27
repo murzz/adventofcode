@@ -1,6 +1,13 @@
 #define BOOST_TEST_MODULE Advent of Code day 2
+
+#include <boost/predef.h>
+
+#if BOOST_COMP_CLANG
+#include <boost/test/included/unit_test.hpp>
+#else
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
+#endif
 
 #include <fstream>
 #include <streambuf>
@@ -55,7 +62,7 @@ BOOST_AUTO_TEST_CASE(test)
 
 BOOST_AUTO_TEST_CASE(solution)
 {
-   std::ifstream input_data("/home/dm/git/adventofcode/day2/input-data");
+   std::ifstream input_data("input-data");
    std::string gift_dimensions_str((std::istreambuf_iterator<char>(input_data)),
          std::istreambuf_iterator<char>());
 
@@ -64,6 +71,6 @@ BOOST_AUTO_TEST_CASE(solution)
    const auto solved_ribbon = solved.second;
 
    BOOST_TEST_MESSAGE(
-         boost::format("Elves need total %1% square feet of wrapping paper and %2% feet of ribbon!") % solved_area
+         boost::format("Solution for day #2: Elves need total %1% square feet of wrapping paper and %2% feet of ribbon!") % solved_area
                % solved_ribbon);
 }

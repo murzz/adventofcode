@@ -1,6 +1,13 @@
 #define BOOST_TEST_MODULE Advent of Code day 1
+
+#include <boost/predef.h>
+
+#if BOOST_COMP_CLANG
+#include <boost/test/included/unit_test.hpp>
+#else
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
+#endif
 
 #include <sstream>
 #include <boost/format.hpp>
@@ -47,5 +54,7 @@ BOOST_AUTO_TEST_CASE(solution)
    const auto solved_floor = solved.first;
    const auto solved_position = solved.second;
 
-   BOOST_TEST_MESSAGE(boost::format("Santa's floor is floor #%1%, he will enter basement on his %2%(th) move") % solved_floor % solved_position);
+   BOOST_TEST_MESSAGE(
+         boost::format("Solution for day #1: Santa's floor is floor #%1%, he will enter basement on his %2%(th) move!") % solved_floor
+               % solved_position);
 }
