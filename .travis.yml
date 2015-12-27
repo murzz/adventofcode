@@ -22,7 +22,8 @@ install:
 before_script:
 - src_dir=$(pwd)
 - build_dir=$(mktemp --directory)
-- test_log=$(mktemp)
+#- test_log=$(mktemp)
+- test_log="solution-${CC}.txt"
 script:
 - cmake -H$src_dir -B$build_dir
 - cmake --build $build_dir --target all
