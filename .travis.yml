@@ -22,7 +22,8 @@ install:
 before_script:
 - src_dir=$(pwd)
 - build_dir=$(mktemp --directory)
-- test_log=$(mktemp)
+#- test_log=$(mktemp)
+- test_log="solution-${CC}.txt"
 script:
 - cmake -H$src_dir -B$build_dir
 - cmake --build $build_dir --target all
@@ -34,6 +35,7 @@ deploy:
   api_key:
     secure: n/EgqevxKRx3+CR46lwtF/CZ5A7qg+WI20lY2+8D7xxfmXzVQmt75Xl59C7f+Ood605KaOgkLyAb7PxoQ1mDACLG8hyvkJJxlolMcUU3ag4ZFuQyMjYesa3vgZc2jHZ0En+FnpiVmOpkMC6D7Fk7i31NOeA2gsp/Fgr+QMZQaaIyxY0E8if7LKqdLk7ix6UsQ+p8m2qGk7exi5hVOWUlWW8bWlDOVjJfwQqUaOsdTcccgBxPRigBt6ylL6PIvOEADK4y7m84L0bxJy1Zy/ynqbrHtG4l2PwoPdqXurBpvN4vIe8Mxz9uvMXu+iH+CI2aFZPpNYJ2EOORHyjB246tI1lgaynNbchHdE8vvIId9W/CJ4Wd9k2rZ6Zw5bhcEkafRT4HokTvqD0cVuW+qXILdHWcVVFnUmjf/OO0J4JpvaYQ+09Hp+49EbdrtXITNm+d4doHG1dBv0xc3Nhg8x5n1zOUmWVacZGNCoEhuS1o3+Ns3EI0I2lBenF6RDPENgChjAbJ+hnt/kI7+8WEEAt5qdHMJRX6e80R9CNPewgktCkb4u03P8Dizp8xUVhiuakivyXZnGrjyMY3HPt9DKpYhCfcqf/z/8tgBtBnkzSKuDxrxFEXy5bKgSlO4UDQ5V1NGexlQILQKgreEW/hpGcu27Cvxm6eluCCraatNrAQBog=
   file: "$test_log"
+  skip_cleanup: true
   on:
     repo: murzz/adventofcode
     tags: true
