@@ -1,6 +1,13 @@
 #define BOOST_TEST_MODULE Advent of Code day 2
+
+#include <boost/predef.h>
+
+#if BOOST_COMP_CLANG
+#include <boost/test/included/unit_test.hpp>
+#else
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
+#endif
 
 #include <fstream>
 #include <streambuf>
