@@ -55,7 +55,7 @@ BOOST_AUTO_TEST_CASE(test)
 
 BOOST_AUTO_TEST_CASE(solution)
 {
-   std::ifstream input_data("/home/dm/git/adventofcode/day2/input-data");
+   std::ifstream input_data("input-data");
    std::string gift_dimensions_str((std::istreambuf_iterator<char>(input_data)),
          std::istreambuf_iterator<char>());
 
