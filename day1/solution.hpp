@@ -35,7 +35,7 @@ result_type solution(std::istream && map)
          else
          {
             std::cerr << boost::format("unknown direction '%1%'") % direction << std::endl;
-            // although direction is incorrect it will be still count
+            // although direction is incorrect it will be still count in
          }
 
       if (!is_basement_visited)

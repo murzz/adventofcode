@@ -2,65 +2,93 @@
 
 #include <iostream>
 #include <fstream>
-#include <boost/format.hpp>
+//#include <boost/format.hpp>
+#include <boost/tokenizer.hpp>
 
 namespace adventofcode
 {
-namespace day1
+namespace day2
 {
-using result_type = std::pair<int, int>;
+
+using side_type = int;
+using ribbon_type = side_type;
+using area_type = side_type;
+using result_type = std::pair<area_type, ribbon_type>;
+
+result_type operator +=(result_type & lhs, const result_type & rhs)
+{
+   lhs.first += rhs.first;
+   lhs.second += rhs.second;
+   return lhs;
+}
+
 namespace detail
 {
-result_type solution(std::istream && map)
+result_type single_gift(const side_type & l, const side_type & w, const side_type & h)
 {
-   auto floor = 0; // start counting floors from 0
-   const auto basement = -1; // basement floor number is -1
-   auto is_basement_visited = false;
-   auto position = 0; // position of first basement visit
-   const std::istream::char_type up = '(';
-   const std::istream::char_type down = ')';
+   // area
+   const auto lw_area = l * w;
+   const auto wh_area = w * h;
+   const auto hl_area = h * l;
+   const auto smallest_side_area = std::min(std::min(lw_area, wh_area), hl_area);
 
-   std::istream::char_type direction;
-   while (map >> direction)
+   const auto area = 2 * lw_area + 2 * wh_area + 2 * hl_area + smallest_side_area;
+
+   // ribbon
+   const auto bow = l * w * h; // the feet of ribbon required for
+                               // the perfect bow is equal to the cubic feet of volume of the present.
+                               // Don't ask how they tie the bow, though; they'll never tell.
+   const auto lw_perimeter = 2 * (l + w);
+   const auto wh_perimeter = 2 * (w + h);
+   const auto hl_perimeter = 2 * (h + l);
+   const auto smalles_perimeter = std::min(std::min(lw_perimeter, wh_perimeter), hl_perimeter);
+   const auto ribbon = smalles_perimeter + bow;
+
+   return std::make_pair(area, ribbon);
+}
+
+result_type single_gift(const std::string & gift_dimension_str)
+{
+   boost::char_separator<char> sep("x");
+   boost::tokenizer<boost::char_separator<char>> gift_dimension(gift_dimension_str, sep);
+
+   // Ugly conversion of tokens to integer dimensions
+   std::vector<side_type> gift_dimension_items;
+
+   for (const auto & gift_dimension_item : gift_dimension)
    {
-      if (direction == up)
-      {
-         floor++;
-      }
-      else
-         if (direction == down)
-         {
-            floor--;
-         }
-         else
-         {
-            std::cerr << boost::format("unknown direction '%1%'") % direction << std::endl;
-            // although direction is incorrect it will be still count
-         }
-
-      if (!is_basement_visited)
-      {
-         position++;
-      }
-
-      if (basement == floor)
-      {
-         is_basement_visited = true;
-      }
+      gift_dimension_items.push_back(std::stoi(gift_dimension_item));
    }
-   return std::make_pair(floor, is_basement_visited ? position : -1);
+
+   const auto l = gift_dimension_items.back();
+   gift_dimension_items.pop_back();
+   const auto w = gift_dimension_items.back();
+   gift_dimension_items.pop_back();
+   const auto h = gift_dimension_items.back();
+   gift_dimension_items.pop_back();
+
+   return single_gift(l, w, h);
+}
+
+result_type many_gifts(const std::string & gift_dimensions_str)
+{
+   boost::char_separator<char> sep("\n");
+   boost::tokenizer<boost::char_separator<char>> gift_dimensions(gift_dimensions_str, sep);
+
+   result_type total = std::make_pair(0, 0);
+
+   for (const auto & gift_dimension_str : gift_dimensions)
+   {
+      total += single_gift(gift_dimension_str);
+   }
+
+   return total;
 }
 }
 
-result_type solve(std::istream && input)
+result_type solve(const std::string & input)
 {
-   return detail::solution(std::move(input));
-}
-
-result_type solve()
-{
-   std::ifstream input_data("input-data");
-   return solve(std::move(input_data));
+   return detail::many_gifts(input);
 }
 
 }

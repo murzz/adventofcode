@@ -1,51 +1,69 @@
-#define BOOST_TEST_MODULE advent of code day 1 tests
+#define BOOST_TEST_MODULE Advent of Code day 2
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-#include <sstream>
+#include <fstream>
+#include <streambuf>
+#include <string>
 #include <boost/format.hpp>
 
 #include "solution.hpp"
-using namespace adventofcode::day1;
+using namespace adventofcode::day2;
 
 ///@todo: BOOST_DATA_TEST_CASE
-void run_test(const int & floor, const int & position, const std::string & map)
+template<typename Solver>
+void run_test(const area_type & area, const ribbon_type & ribbon, Solver solver)
 {
-   const auto solved = solve(std::stringstream(map));
-   const auto solved_floor = solved.first;
-   const auto solved_position = solved.second;
+   const auto solved = solver();
 
-   BOOST_CHECK_MESSAGE(floor == solved_floor,
-         boost::format("solved floor is %1%, expected floor is %2%!") % solved_floor % floor);
+   const auto solved_area = solved.first;
+   const auto solved_ribbon = solved.second;
 
-   BOOST_CHECK_MESSAGE(position == solved_position,
-         boost::format("solved position is %1%, expected position is %2%!") % solved_position % position);
+   BOOST_CHECK_MESSAGE(area == solved_area,
+         boost::format("solved area is %1%, expected area is %2%!") % solved_area % area);
+
+   BOOST_CHECK_MESSAGE(ribbon == solved_ribbon,
+         boost::format("solved ribbon is %1%, expected ribbon is %2%!") % solved_ribbon % ribbon);
 }
 
 BOOST_AUTO_TEST_CASE(test)
 {
-   run_test(0, -1, "(())");
-   run_test(0, -1, "()()");
+   const auto solver_single = [](const side_type & l, const side_type & w,
+         const side_type & h)->auto
+   {
+      return detail::single_gift(l, w, h);
+   };
 
-   run_test(3, -1, "(((");
-   run_test(3, -1, "(()(()(");
+   const auto solver_single_str = [](const std::string & lwh)->auto
+   {
+      return detail::many_gifts(lwh);
+   };
 
-   run_test(-1, 3, "())");
-   run_test(-1, 1, "))(");
+   const auto solver_many_str = [](const std::string & many_lwh)->auto
+   {
+      return detail::many_gifts(many_lwh);
+   };
 
-   run_test(-3, 1, ")))");
-   run_test(-3, 1, ")())())");
+   run_test(58, 34, std::bind(solver_single, 2, 3, 4));
+   run_test(43, 14, std::bind(solver_single, 1, 1, 10));
 
-   run_test(-1, 1, ")");
-   run_test(-1, 5, "()())");
+   run_test(58, 34, std::bind(solver_single_str, "2x3x4"));
+   run_test(43, 14, std::bind(solver_single_str, "1x1x10"));
+
+   run_test(101, 48, std::bind(solver_many_str, "2x3x4\n1x1x10"));
 }
 
 BOOST_AUTO_TEST_CASE(solution)
 {
-   std::ifstream input_data("input-data");
-   const auto solved = solve(std::move(input_data));
-   const auto solved_floor = solved.first;
-   const auto solved_position = solved.second;
+   std::ifstream input_data("/home/dm/git/adventofcode/day2/input-data");
+   std::string gift_dimensions_str((std::istreambuf_iterator<char>(input_data)),
+         std::istreambuf_iterator<char>());
 
-   BOOST_TEST_MESSAGE(boost::format("Santa's floor is floor #%1%, he will enter basement on his %2%(th) move") % solved_floor % solved_position);
+   const auto solved = solve(gift_dimensions_str);
+   const auto solved_area = solved.first;
+   const auto solved_ribbon = solved.second;
+
+   BOOST_TEST_MESSAGE(
+         boost::format("Elves need total %1% square feet of wrapping paper and %2% feet of ribbon!") % solved_area
+               % solved_ribbon);
 }
