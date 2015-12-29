@@ -29,18 +29,20 @@ void run_test(const result_type & expected, const input_type & input)
    std::stringstream ss_solved;
    ss_solved << solved;
 
-   BOOST_CHECK_MESSAGE(expected == solved, boost::format("Expected %1%, received %2%") % ss_expected.str() % ss_solved.str());
+   BOOST_CHECK_MESSAGE(expected == solved,
+         boost::format("Expected %1%, received %2%") % ss_expected.str() % ss_solved.str());
 }
 
 BOOST_AUTO_TEST_CASE(test)
 {
    run_test(result_type(2, 2), ">");
-   run_test(result_type(4, 5), "^>v<");
+   run_test(result_type(2, 3), "^v");
+   run_test(result_type(4, 3), "^>v<");
    run_test(result_type(2, 11), "^v^v^v^v^v");
-   run_test(result_type(4, 6), ">^^v^");
-   run_test(result_type(4, 7), "<<<>>>");
-   run_test(result_type(5, 8), "<<<>>>>");
-   run_test(result_type(7, 13), "<<<>>>^^^vvv");
+//   run_test(result_type(4, -1), ">^^v^");
+//   run_test(result_type(4, -1), "<<<>>>");
+//   run_test(result_type(5, -1), "<<<>>>>");
+//   run_test(result_type(7, -1), "<<<>>>^^^vvv");
 }
 
 BOOST_AUTO_TEST_CASE(solution)
@@ -49,8 +51,10 @@ BOOST_AUTO_TEST_CASE(solution)
    std::string input_data_str((std::istreambuf_iterator<char>(input_data)),
          std::istreambuf_iterator<char>());
 
-//   run_test(result_type(-1, 8193), input_data_str);
+   run_test(result_type(2592, 2360), input_data_str);
 
    const auto solved = solve(input_data_str);
-   BOOST_TEST_MESSAGE(boost::format("Solution for day #3: %1% houses receive at least one present!") % solved.first);
+   BOOST_TEST_MESSAGE(
+         boost::format("Solution for day #3: %1% houses received at least one present last year, %2% this year!")
+               % solved.first % solved.second);
 }

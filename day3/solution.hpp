@@ -110,24 +110,10 @@ struct house
    {
    }
 
-   int r(const house & house) const
-
-   {
-//      return std::sqrt(house.x_ * house.x_ + house.y_ * house.y_);
-      return house.x_ + house.y_;
-//      return house.x_ * house.y_ ;
-   }
-
    bool is_self(const house & rhs) const
 
    {
       return &rhs == this;
-   }
-
-   bool operator<(const house & rhs) const
-
-   {
-      return r(*this) < r(rhs);
    }
 
    bool operator==(const house & rhs) const
@@ -152,7 +138,6 @@ std::ostream & operator<<(std::ostream & lhs, const house & rhs)
    return lhs;
 }
 
-//using houses = std::set<house>;
 using houses = std::vector<house>;
 
 void visit_house(houses & visited_houses, const santa & santa)
@@ -161,80 +146,64 @@ void visit_house(houses & visited_houses, const santa & santa)
    visited_houses.push_back(visited_house);
 }
 
-void calculate_repititions(houses & visited_houses)
+void trim_houses(const houses & visited_houses, houses & unique_houses)
 {
-   for (auto & test_house : visited_houses)
-   {
-      for (const auto & house : visited_houses)
-      {
-         if (house == test_house && !house.is_self(test_house))
-         {
-            test_house.visited_++;
-         }
-      }
-   }
-}
-
-void trim_houses(houses & visited_houses, houses & unique_houses)
-{
-
-//   houses.erase(std::remove_if(houses.begin(),
-//         houses.end(),
-//         [](auto x)
-//         {  return std::isspace(x);
-//         }),
-//         houses.end());
-
-//   std::sort(houses.begin(), houses.end());
-//   auto last = std::unique(houses.begin(), houses.end());
-//   houses.erase(last, houses.end());
-
    for (const auto & house : visited_houses)
    {
-      const auto found = std::find(unique_houses.begin(), unique_houses.end(), house);
-      if (found == unique_houses.end())
+      const auto unique_house = std::find(unique_houses.begin(), unique_houses.end(), house);
+      if (unique_house == unique_houses.end())
       {
+         // house not found, it is unique
          unique_houses.push_back(house);
       }
    }
 }
 
-void print_houses(const houses & houses, const std::string & header)
-{
-   std::cout << header << std::endl;
-   for (const auto & house : houses)
-   {
-      std::cout << house << std::endl;
-   }
-}
-
 result_type solve(const input_type & input)
 {
-   houses visited_houses;
-   houses unique_houses;
+   // last year
+   houses visited_houses_last;
+   houses unique_houses_last;
+
+   // this year
+   houses visited_houses_this;
+   houses unique_houses_this;
 
    // starting point, first house should be visited there too
-   santa santa;
-   visit_house(visited_houses, santa);
+   detail::santa santa_last;
+   visit_house(visited_houses_last, santa_last);
 
-   // movements
+   detail::santa santa_this;
+   detail::santa robo_santa_this;
+   visit_house(visited_houses_this, santa_this); // both are visiting the same house
+
+   // movements replay
+   auto whos_turn = 2;
    for (const auto& step : input)
    {
-      santa.move(step);
-      visit_house(visited_houses, santa);
+      // last year
+      santa_last.move(step);
+      visit_house(visited_houses_last, santa_last);
+
+      // this year
+      if (whos_turn % 2)
+      {
+         santa_this.move(step);
+         visit_house(visited_houses_this, santa_this);
+      }
+      else
+      {
+         robo_santa_this.move(step);
+         visit_house(visited_houses_this, robo_santa_this);
+      }
+      whos_turn++;
    }
-   const auto visited_count = visited_houses.size();
 
    // analysis
-//   calculate_repititions(visited_houses);
+   trim_houses(visited_houses_last, unique_houses_last);
+   trim_houses(visited_houses_this, unique_houses_this);
 
-//   print_houses(visited_houses, "--- before ---");
-
-   trim_houses(visited_houses, unique_houses);
-
-//   print_houses(visited_houses, "--- after ---");
-
-   return result_type(unique_houses.size(), visited_count);
+   return result_type(unique_houses_last.size(), unique_houses_this.size());
 }
 }
 
