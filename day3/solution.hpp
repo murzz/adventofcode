@@ -36,10 +36,10 @@ namespace detail
 {
 namespace move
 {
-constexpr input_type::value_type up = '^';
-constexpr input_type::value_type down = 'v';
-constexpr input_type::value_type right = '>';
-constexpr input_type::value_type left = '<';
+constexpr input_type::value_type north = '^';
+constexpr input_type::value_type south = 'v';
+constexpr input_type::value_type east = '>';
+constexpr input_type::value_type west = '<';
 }
 
 struct santa
@@ -50,37 +50,39 @@ struct santa
          x_(x), y_(y)
    {
    }
-   void move(const input_type::value_type & step)
+   void move(const input_type::value_type & direction)
    {
-      switch (step)
+      switch (direction)
       {
-         case move::up:
-            up();
+         case move::north:
+            north();
             break;
-         case move::down:
-            down();
+         case move::south:
+            south();
             break;
-         case move::right:
-            right();
+         case move::east:
+            east();
             break;
-         case move::left:
-            left();
+         case move::west:
+            west();
             break;
+         default:
+            std::cerr << "Unexpected direction: " << direction << std::endl;
       }
    }
-   void up()
+   void north()
    {
       y_++;
    }
-   void down()
+   void south()
    {
       y_--;
    }
-   void right()
+   void east()
    {
       x_++;
    }
-   void left()
+   void west()
    {
       x_--;
    }
@@ -99,20 +101,27 @@ struct house
    int visited_;
 
    house(const house & house) :
-         x_(house.x_), y_(house.y_), visited_(0)
+         x_(house.x_), y_(house.y_), visited_(house.visited_)
    {
    }
 
    house(const santa & santa) :
-         x_(santa.x_), y_(santa.y_), visited_(0)
+         x_(santa.x_), y_(santa.y_), visited_(1)
    {
    }
 
    int r(const house & house) const
-         {
+
+   {
 //      return std::sqrt(house.x_ * house.x_ + house.y_ * house.y_);
       return house.x_ + house.y_;
 //      return house.x_ * house.y_ ;
+   }
+
+   bool is_self(const house & rhs) const
+
+   {
+      return &rhs == this;
    }
 
    bool operator<(const house & rhs) const
@@ -146,59 +155,86 @@ std::ostream & operator<<(std::ostream & lhs, const house & rhs)
 //using houses = std::set<house>;
 using houses = std::vector<house>;
 
-void remember_house(houses & houses, const santa & santa)
+void visit_house(houses & visited_houses, const santa & santa)
 {
-//   const house santa_house(santa);
-//   for (const auto & house : houses)
-//   {
-//      std::cout << santa_house << "==" << house << " " << (santa_house == house) << std::endl;
-//      std::cout << "!(" << santa_house << "<" << house << ") " << !(santa_house < house) << std::endl;
-//      std::cout << "!(" << house << "<" << santa_house << ") " << !(house < santa_house) << std::endl;
-//      std::cout << "                   " << ((santa_house < house) && !(house < santa_house)) << std::endl;
-//   }
-//
-//   detail::house house(santa);
-//   const auto inserted = houses.insert(house);
-//   std::cout << "Santa " << santa << " inserted " << inserted.second << " s = " << houses.size() << std::endl;
-
-   const house santa_house(santa);
-   houses.push_back(santa_house);
+   const house visited_house(santa);
+   visited_houses.push_back(visited_house);
 }
 
-void trim_houses(houses & houses)
+void calculate_repititions(houses & visited_houses)
 {
-//   std::cout << "before--------" << std::endl;
-//   for (const auto & house : houses)
-//   {
-//      std::cout << house << std::endl;
-//   }
-   std::sort(houses.begin(), houses.end());
-   auto last = std::unique(houses.begin(), houses.end());
-   houses.erase(last, houses.end());
-   std::cout << "after--------" << std::endl;
+   for (auto & test_house : visited_houses)
+   {
+      for (const auto & house : visited_houses)
+      {
+         if (house == test_house && !house.is_self(test_house))
+         {
+            test_house.visited_++;
+         }
+      }
+   }
+}
 
-//      for (const auto & house : houses)
-//      {
-//         std::cout << house << std::endl;
-//      }
+void trim_houses(houses & visited_houses, houses & unique_houses)
+{
+
+//   houses.erase(std::remove_if(houses.begin(),
+//         houses.end(),
+//         [](auto x)
+//         {  return std::isspace(x);
+//         }),
+//         houses.end());
+
+//   std::sort(houses.begin(), houses.end());
+//   auto last = std::unique(houses.begin(), houses.end());
+//   houses.erase(last, houses.end());
+
+   for (const auto & house : visited_houses)
+   {
+      const auto found = std::find(unique_houses.begin(), unique_houses.end(), house);
+      if (found == unique_houses.end())
+      {
+         unique_houses.push_back(house);
+      }
+   }
+}
+
+void print_houses(const houses & houses, const std::string & header)
+{
+   std::cout << header << std::endl;
+   for (const auto & house : houses)
+   {
+      std::cout << house << std::endl;
+   }
 }
 
 result_type solve(const input_type & input)
 {
-   houses houses;
-   santa santa;
+   houses visited_houses;
+   houses unique_houses;
 
-   // starting point
-   remember_house(houses, santa);
+   // starting point, first house should be visited there too
+   santa santa;
+   visit_house(visited_houses, santa);
 
    // movements
-   for (const auto & step : input)
+   for (const auto& step : input)
    {
       santa.move(step);
-      remember_house(houses, santa);
+      visit_house(visited_houses, santa);
    }
-   trim_houses(houses);
-   return result_type(houses.size(), -1);
+   const auto visited_count = visited_houses.size();
+
+   // analysis
+//   calculate_repititions(visited_houses);
+
+//   print_houses(visited_houses, "--- before ---");
+
+   trim_houses(visited_houses, unique_houses);
+
+//   print_houses(visited_houses, "--- after ---");
+
+   return result_type(unique_houses.size(), visited_count);
 }
 }
 
