@@ -41,7 +41,7 @@ BOOST_AUTO_TEST_CASE(test)
 
 BOOST_AUTO_TEST_CASE(solution)
 {
-   std::ifstream input_data("/home/dm/git/adventofcode/day4/input-data");
+   std::ifstream input_data("input-data");
    std::string input_data_str((std::istreambuf_iterator<char>(input_data)),
          std::istreambuf_iterator<char>());
 
