@@ -11,8 +11,7 @@
 
 #include <fstream>
 #include <streambuf>
-#include <iostream>
-#include <string>
+#include <sstream>
 #include <boost/format.hpp>
 
 #include "solution.hpp"
