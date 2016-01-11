@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <fstream>
-//#include <boost/format.hpp>
 #include <boost/tokenizer.hpp>
 
 namespace adventofcode
