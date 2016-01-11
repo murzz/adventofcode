@@ -2,13 +2,6 @@
 
 #include <string>
 #include <openssl/md5.h>
-//#include <functional>
-//#include <vector>
-//#include <algorithm>
-//#include <iostream>
-//#include <fstream>
-//#include <boost/format.hpp>
-//#include <boost/tokenizer.hpp>
 
 namespace adventofcode
 {
@@ -16,8 +9,8 @@ namespace day4
 {
 
 using secret_key_type = int;
-using second_type = secret_key_type;
-using result_type = std::pair<secret_key_type, second_type>;
+using second_secret_key_type = secret_key_type;
+using result_type = std::pair<secret_key_type, second_secret_key_type>;
 using input_type = std::string;
 
 std::ostream & operator<<(std::ostream & lhs, const result_type & rhs)

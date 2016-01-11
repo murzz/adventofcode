@@ -1,4 +1,4 @@
-#define BOOST_TEST_MODULE Advent of Code day 4
+#define BOOST_TEST_MODULE Advent of Code
 
 #include <boost/predef.h>
 
@@ -15,7 +15,7 @@
 #include <boost/format.hpp>
 
 #include "solution.hpp"
-using namespace adventofcode::day4;
+using namespace adventofcode::day5;
 
 ///@todo: BOOST_DATA_TEST_CASE
 void run_test(const result_type & expected, const input_type & input)
@@ -34,8 +34,23 @@ void run_test(const result_type & expected, const input_type & input)
 
 BOOST_AUTO_TEST_CASE(test)
 {
-   run_test(result_type(609043, 6742839), "abcdef");
-   run_test(result_type(1048970, 5714438), "pqrstuv");
+   run_test(result_type(1, 0), "ugknbfddgicrmopn");
+   run_test(result_type(1, 0), "aaa");
+   run_test(result_type(0, 0), "jchzalrnumimnmhp");
+   run_test(result_type(0, 0), "haegwjzuvuyypxyu");
+   run_test(result_type(0, 0), "dvszwmarrgswjxmb");
+
+   run_test(result_type(0, 1), "qjhvhtzxzqqjkmpb");
+   run_test(result_type(0, 1), "xxyxx");
+   run_test(result_type(0, 0), "uurcxstgmygtbstg");
+   run_test(result_type(0, 0), "ieodomkazucvgmuy");
+   run_test(result_type(0, 1), "aabaaba");
+   run_test(result_type(0, 1), "aabaa");
+   run_test(result_type(0, 1), "xyxy");
+   run_test(result_type(0, 1), "xyxyxyx");
+   run_test(result_type(0, 1), "xyxyabcdefeghi");
+   run_test(result_type(0, 1), "aabcdefgaaabcdefeghi");
+   run_test(result_type(0, 1), "aaaxyxy");
 }
 
 BOOST_AUTO_TEST_CASE(solution)
@@ -44,10 +59,10 @@ BOOST_AUTO_TEST_CASE(solution)
    std::string input_data_str((std::istreambuf_iterator<char>(input_data)),
          std::istreambuf_iterator<char>());
 
-   run_test(result_type(346386, 9958218), input_data_str);
+   run_test(result_type(258, 53), input_data_str);
 
    const auto solved = solve(input_data_str);
    BOOST_TEST_MESSAGE(
-         boost::format("Solution for day #4: %1% is lowest positive number for 5 zeros, %2% for 6 zeros!")
+         boost::format("Solution for day #5: %1% strings are nice, %2% are nicer!")
                % solved.first % solved.second);
 }
