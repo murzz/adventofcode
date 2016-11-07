@@ -1,5 +1,5 @@
 enable_testing()
-include_directories(${Boost_INCLUDE_DIRS})
+include_directories(${Boost_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR})
 
 macro(adventofcode_add_test DAY_NAME)
 
