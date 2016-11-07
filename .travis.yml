@@ -26,7 +26,7 @@ before_script:
 - test_log="solution-${CC}.txt"
 script:
 - cmake -H$src_dir/mk/deps -B$build_dir/mk/deps
-- cmake --build $build_dir/mk/deps
+- sudo cmake --build $build_dir/mk/deps
 - cmake -H$src_dir -B$build_dir
 - cmake --build $build_dir --target all
 after_success:
