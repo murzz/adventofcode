@@ -57,11 +57,5 @@ result_type solve(std::istream && input)
    return detail::solution(std::move(input));
 }
 
-result_type solve()
-{
-   std::ifstream input_data("input-data");
-   return solve(std::move(input_data));
-}
-
 }
 }
