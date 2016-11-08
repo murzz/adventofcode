@@ -14,13 +14,18 @@ struct OptionsFixture
    {
       po::options_description options("Allowed options");
       options.add_options()
-      ("help", "produce help message")
-      ("filename,f", po::value<std::string>()->default_value("input-data"), "filename of input data");
+         ("help", "produce help message")
+         ("filename,f", po::value<std::string>()->default_value("input-data"), "input data filename");
 
       po::store(
             po::parse_command_line(boost::unit_test::framework::master_test_suite().argc,
                   boost::unit_test::framework::master_test_suite().argv, options), vm_);
       po::notify(vm_);
+
+      if (vm_.count("help"))
+      {
+         std::cout << options << "\n";
+      }
    }
 
    po::variables_map vm_;
