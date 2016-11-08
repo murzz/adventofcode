@@ -35,7 +35,7 @@ set(BOOST_JAM_TOOLCHAIN
 MESSAGE(STATUS ${BOOST_JAM_TOOLCHAIN})
 
 set(BOOST_CONFIGURE_PARAMS
-#     --prefix=${CMAKE_INSTALL_PREFIX}
+   --prefix=${CMAKE_INSTALL_PREFIX}
 #   --prefix=${STAGING_ROOT}
    --with-libraries=system,program_options,test
 )
