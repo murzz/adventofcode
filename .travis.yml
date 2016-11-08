@@ -22,13 +22,14 @@ install:
 before_script:
 - src_dir=$(pwd)
 - build_dir=$(mktemp --directory)
+- install_dir=$(mktemp --directory)
 #- test_log=$(mktemp)
 - test_log="solution-${CC}.txt"
 script:
-- cmake -H$src_dir/mk/deps -B$build_dir/mk/deps
-- sudo cmake --build $build_dir/mk/deps
-- cmake -H$src_dir -B$build_dir
-- VERBOSE=1 cmake --build $build_dir --target all
+- cmake -H$src_dir/mk/deps -B$build_dir/mk/deps -DCMAKE_INSTALL_PREFIX=$install_dir
+- cmake --build $build_dir/mk/deps
+- cmake -H$src_dir -B$build_dir -DCMAKE_INSTALL_PREFIX=$install_dir
+- cmake --build $build_dir --target all
 after_success:
 #- cmake --build $build_dir --target test
 - cd $build_dir && ctest -j -VV --extra-verbose | grep "Solution for day" | tee "$test_log"; test ${PIPESTATUS[0]} -eq 0
