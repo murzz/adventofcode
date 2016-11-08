@@ -17,6 +17,8 @@ if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
    set(BOOST_TOOLSET gcc)
 elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
    set(BOOST_TOOLSET clang)
+   set(BOOST_CXX_FLAGS "-stdlib=libc++")
+   set(BOOST_LINK_FLAGS "-stdlib=libc++")
 endif()
 
 if(CMAKE_CROSSCOMPILING)
@@ -44,6 +46,8 @@ set(BOOST_BUILD_PARAMS
 # for modular boost
 #    headers
     toolset=${BOOST_TOOLSET}-${BOOST_TOOLSET_TARGET}
+    cxxflags="${BOOST_CXX_FLAGS}"
+    linkflags="${BOOST_LINK_FLAGS}"
 # Suppress all informational messages    
     -d0
 #    link=static
