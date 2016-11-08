@@ -46,15 +46,21 @@ set(BOOST_BUILD_PARAMS
 # for modular boost
 #    headers
     toolset=${BOOST_TOOLSET}-${BOOST_TOOLSET_TARGET}
-    cxxflags="${BOOST_CXX_FLAGS}"
-    linkflags="${BOOST_LINK_FLAGS}"
 # Suppress all informational messages    
     -d0
 #    link=static
     variant=release
 #    threading=single
 #    runtime-link=shared
- )
+)
+
+if(BOOST_CXX_FLAGS)
+   set(BOOST_BUILD_PARAMS ${BOOST_BUILD_PARAMS} cxxflags="${BOOST_CXX_FLAGS}")
+endif()
+
+if(BOOST_LINK_FLAGS)
+   set(BOOST_BUILD_PARAMS ${BOOST_BUILD_PARAMS} linkflags="${BOOST_LINK_FLAGS}")
+endif()
 
 #include(ProcessorCount)
 #ProcessorCount(N)
