@@ -12,7 +12,7 @@ struct OptionsFixture
 {
    OptionsFixture()
    {
-      po::options_description options("Allowed options");
+      po::options_description options("Advent of Code solution options");
       options.add_options()
          ("help", "produce help message")
          ("filename,f", po::value<std::string>()->default_value("input-data"), "input data filename");
