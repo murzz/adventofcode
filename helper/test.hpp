@@ -1,14 +1,21 @@
 #pragma once
 
 #include <tuple>
+#include <string>
+#include <iostream>
 
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 #include <boost/test/data/test_case.hpp>
 #include <boost/test/data/monomorphic.hpp>
+namespace ut = boost::unit_test;
 
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/info_parser.hpp>
+namespace pt = boost::property_tree;
+
+#include <boost/program_options.hpp>
+namespace po = boost::program_options;
 
 #include "helper/solution.hpp"
 
@@ -25,7 +32,7 @@ public:
 
    struct iterator
    {
-      iterator(boost::property_tree::ptree::iterator iter) :
+      iterator(pt::ptree::iterator iter) :
             iter_(iter)
       {
       }
@@ -44,16 +51,16 @@ public:
          iter_++;
       }
 
-   private:
-      boost::property_tree::ptree::iterator iter_;
+      private:
+         pt::ptree::iterator iter_;
    };
 
    dataset()
    {
-      boost::property_tree::read_info("test-data", tree_);
+      pt::read_info(test_data_filename(), tree_);
    }
 
-   boost::unit_test::data::size_t size() const
+   ut::data::size_t size() const
    {
       return tree_.size();
    }
@@ -64,7 +71,29 @@ public:
    }
 
 private:
-   boost::property_tree::ptree tree_;
+   pt::ptree tree_;
+
+   const std::string test_data_filename()
+   {
+      po::options_description options("Test options");
+      options.add_options()
+         ("help", "produce help message")
+         ("filename,f", po::value<std::string>()->default_value("test-data"), "input data filename");
+
+      po::variables_map vm;
+      po::store(
+            po::parse_command_line(ut::framework::master_test_suite().argc,
+                  ut::framework::master_test_suite().argv, options), vm);
+      po::notify(vm);
+
+      if (vm.count("help"))
+      {
+         std::cout << options << std::endl;
+      }
+
+      return vm["filename"].as<std::string>();
+   }
+
 };
 
 }
@@ -88,7 +117,7 @@ struct is_dataset<adventofcode::dataset> : boost::mpl::true_
 }
 
 #define TEST(test_case_name)                                                               \
-BOOST_DATA_TEST_CASE( test_case_name, adventofcode::dataset(), input, output1, output2)    \
+BOOST_DATA_TEST_CASE(test_case_name, adventofcode::dataset(), input, output1, output2)     \
 {                                                                                          \
    const auto output = solve(input);                                                       \
    BOOST_CHECK(output.first == output1);                                                   \
