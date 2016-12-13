@@ -1,27 +1,29 @@
 #pragma once
 
-#include <iostream>
-#include <fstream>
-#include <boost/format.hpp>
+#include "helper/solution.hpp"
+
+#include <stdexcept>
+#include <sstream>
+
 
 namespace adventofcode
 {
 namespace day1
 {
-using result_type = std::pair<int, int>;
 namespace detail
 {
-result_type solution(std::istream && map)
+output_type solve(const input_type & map)
 {
    auto floor = 0; // start counting floors from 0
    const auto basement = -1; // basement floor number is -1
    auto is_basement_visited = false;
    auto position = 0; // position of first basement visit
-   const std::istream::char_type up = '(';
-   const std::istream::char_type down = ')';
+   const std::stringstream::char_type up = '(';
+   const std::stringstream::char_type down = ')';
 
-   std::istream::char_type direction;
-   while (map >> direction)
+   std::stringstream::char_type direction;
+   std::stringstream map_stream(map);
+   while (map_stream >> direction)
    {
       if (direction == up)
       {
@@ -34,8 +36,7 @@ result_type solution(std::istream && map)
          }
          else
          {
-            std::cerr << boost::format("unknown direction '%1%'") % direction << std::endl;
-            // although direction is incorrect it will be still count in
+            throw std::invalid_argument("Invalid direction: " + direction);
          }
 
       if (!is_basement_visited)
@@ -52,9 +53,9 @@ result_type solution(std::istream && map)
 }
 }
 
-result_type solve(std::istream && input)
+output_type solve(const input_type & input)
 {
-   return detail::solution(std::move(input));
+   return detail::solve(input);
 }
 
 }
