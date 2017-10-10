@@ -36,7 +36,7 @@ output_type solve(const input_type & map)
          }
          else
          {
-            throw std::invalid_argument("Invalid direction: " + direction);
+            throw std::invalid_argument(std::string("Invalid direction: ") + direction);
          }
 
       if (!is_basement_visited)
