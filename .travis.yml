@@ -22,9 +22,9 @@ env:
 - SANITIZER=SANITIZE_UNDEFINED   COMPILER_NAME=clang CC=clang-5.0 CXX=clang++-5
 before_script:
 - SRC_DIR=$(pwd)
-- build_dir=$(mktemp --directory)
-- install_dir=$(mktemp --directory)
-- test_log="solution-${CC}-${SANITIZER}.txt"
+- BUILD_DIR=$(mktemp --directory)
+- INSTALL_DIR=$(mktemp --directory)
+- TEST_LOG="solution-${CC}-${SANITIZER}.txt"
 script:
 - cmake -H${SRC_DIR}/mk/deps -B${BUILD_DIR}/mk/deps -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR}
 - cmake --build ${BUILD_DIR}/mk/deps
