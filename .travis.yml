@@ -12,29 +12,32 @@ addons:
     - clang-5.0
     - g++-7
 env:
-- SANITIZER=SANITIZE_ADDRESS     COMPILER_NAME=gcc CC=gcc-7 CXX=g++-7
-- SANITIZER=SANITIZE_MEMORY      COMPILER_NAME=gcc CC=gcc-7 CXX=g++-7
-- SANITIZER=SANITIZE_THREAD      COMPILER_NAME=gcc CC=gcc-7 CXX=g++-7
-- SANITIZER=SANITIZE_UNDEFINED   COMPILER_NAME=gcc CC=gcc-7 CXX=g++-7
-- SANITIZER=SANITIZE_ADDRESS     COMPILER_NAME=clang CC=clang-5.0 CXX=clang++-6
-- SANITIZER=SANITIZE_MEMORY      COMPILER_NAME=clang CC=clang-5.0 CXX=clang++-6
-- SANITIZER=SANITIZE_THREAD      COMPILER_NAME=clang CC=clang-5.0 CXX=clang++-6
-- SANITIZER=SANITIZE_UNDEFINED   COMPILER_NAME=clang CC=clang-5.0 CXX=clang++-6
+- SANITIZER=SANITIZE_ADDRESS     COMPILER_NAME=gcc   CC=gcc-7     CXX=g++-7
+- SANITIZER=SANITIZE_MEMORY      COMPILER_NAME=gcc   CC=gcc-7     CXX=g++-7
+- SANITIZER=SANITIZE_THREAD      COMPILER_NAME=gcc   CC=gcc-7     CXX=g++-7
+- SANITIZER=SANITIZE_UNDEFINED   COMPILER_NAME=gcc   CC=gcc-7     CXX=g++-7
+- SANITIZER=SANITIZE_ADDRESS     COMPILER_NAME=clang CC=clang-5.0 CXX=clang++-5
+- SANITIZER=SANITIZE_MEMORY      COMPILER_NAME=clang CC=clang-5.0 CXX=clang++-5
+- SANITIZER=SANITIZE_THREAD      COMPILER_NAME=clang CC=clang-5.0 CXX=clang++-5
+- SANITIZER=SANITIZE_UNDEFINED   COMPILER_NAME=clang CC=clang-5.0 CXX=clang++-5
 before_script:
-- src_dir=$(pwd)
+- SRC_DIR=$(pwd)
 - build_dir=$(mktemp --directory)
 - install_dir=$(mktemp --directory)
-- test_log="solution-${CC}.txt"
+- test_log="solution-${CC}-${SANITIZER}.txt"
 script:
-- cmake -H$src_dir -B$build_dir -DCMAKE_INSTALL_PREFIX=$install_dir -DCMAKE_BUILD_TYPE=Debug -D${SANITIZER}=On
-- cmake --build $build_dir --target all
+- cmake -H${SRC_DIR}/mk/deps -B${BUILD_DIR}/mk/deps -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR}
+- cmake --build ${BUILD_DIR}/mk/deps
+- cmake -H${SRC_DIR} -B${BUILD_DIR} -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} -DCMAKE_BUILD_TYPE=Debug -D${SANITIZER}=On
+- cmake --build ${BUILD_DIR} --target all
 after_success:
-- cd $build_dir && ctest -j -VV --extra-verbose | grep "Solution for day" | tee "$test_log"; test ${PIPESTATUS[0]} -eq 0
+#- cmake --build ${BUILD_DIR} --target test
+- cd ${BUILD_DIR} && ctest -j -VV --extra-verbose | grep "Solution for day" | tee "${TEST_LOG}"; test ${PIPESTATUS[0]} -eq 0
 deploy:
   provider: releases
   api_key:
     secure: n/EgqevxKRx3+CR46lwtF/CZ5A7qg+WI20lY2+8D7xxfmXzVQmt75Xl59C7f+Ood605KaOgkLyAb7PxoQ1mDACLG8hyvkJJxlolMcUU3ag4ZFuQyMjYesa3vgZc2jHZ0En+FnpiVmOpkMC6D7Fk7i31NOeA2gsp/Fgr+QMZQaaIyxY0E8if7LKqdLk7ix6UsQ+p8m2qGk7exi5hVOWUlWW8bWlDOVjJfwQqUaOsdTcccgBxPRigBt6ylL6PIvOEADK4y7m84L0bxJy1Zy/ynqbrHtG4l2PwoPdqXurBpvN4vIe8Mxz9uvMXu+iH+CI2aFZPpNYJ2EOORHyjB246tI1lgaynNbchHdE8vvIId9W/CJ4Wd9k2rZ6Zw5bhcEkafRT4HokTvqD0cVuW+qXILdHWcVVFnUmjf/OO0J4JpvaYQ+09Hp+49EbdrtXITNm+d4doHG1dBv0xc3Nhg8x5n1zOUmWVacZGNCoEhuS1o3+Ns3EI0I2lBenF6RDPENgChjAbJ+hnt/kI7+8WEEAt5qdHMJRX6e80R9CNPewgktCkb4u03P8Dizp8xUVhiuakivyXZnGrjyMY3HPt9DKpYhCfcqf/z/8tgBtBnkzSKuDxrxFEXy5bKgSlO4UDQ5V1NGexlQILQKgreEW/hpGcu27Cvxm6eluCCraatNrAQBog=
-  file: $test_log
+  file: ${TEST_LOG}
   skip_cleanup: true
   true:
     repo: murzz/adventofcode
