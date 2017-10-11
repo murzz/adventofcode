@@ -11,6 +11,7 @@ addons:
     packages:
     - clang-5.0
     - g++-7
+    - libc++-dev
 env:
 - SANITIZER=SANITIZE_ADDRESS     COMPILER_NAME=gcc   CC=gcc-7     CXX=g++-7
 - SANITIZER=SANITIZE_MEMORY      COMPILER_NAME=gcc   CC=gcc-7     CXX=g++-7

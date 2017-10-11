@@ -1,8 +1,8 @@
 include(ExternalProject)
 
 # tarball
-set(Boost_Version 1.62.0)
-set(BOOST_SHA1 5fd97433c3f859d8cbab1eaed4156d3068ae3648)
+set(Boost_Version 1.66.1)
+set(BOOST_SHA256 9807a5d16566c57fd74fb522764e0b134a8bbe6b6e8967b83afefd30dcd3be81)
 set(BOOST_TARBALL_TYPE .tar.bz2)
 
 string(REPLACE "." "_" Boost_Version_Underscore ${Boost_Version})
@@ -81,7 +81,7 @@ ExternalProject_Add(boost
 #   GIT_REPOSITORY ${BOOST_REPO_URL}
 #   GIT_TAG ${BOOST_TAG}
     URL ${BOOST_URL}
-    URL_HASH SHA1=${BOOST_SHA1}
+    URL_HASH SHA256=${BOOST_SHA256}
     CONFIGURE_COMMAND ${BOOST_CONFIGURE_COMMAND}
     BUILD_COMMAND ${BOOST_BUILD_COMMAND}
     BUILD_IN_SOURCE TRUE
