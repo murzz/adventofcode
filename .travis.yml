@@ -1,54 +1,30 @@
 dist: trusty
 sudo: false
 language: cpp
-
-matrix:
-  include:
-    - env: COMPILER_NAME=gcc CXX=g++-5 CC=gcc-5
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-5
-    - env: COMPILER_NAME=clang CXX=clang++-3.8 CC=clang-3.8
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.8
-          packages:
-            - clang-3.8
-            
+compiler:
+- gcc
+- clang
 env:
-  - SANITIZER=SANITIZE_ADDRESS
-  - SANITIZER=SANITIZE_MEMORY
-  - SANITIZER=SANITIZE_THREAD
-  - SANITIZER=SANITIZE_UNDEFINED
-
+- SANITIZER=SANITIZE_ADDRESS
+- SANITIZER=SANITIZE_MEMORY
+- SANITIZER=SANITIZE_THREAD
+- SANITIZER=SANITIZE_UNDEFINED
 before_script:
 - src_dir=$(pwd)
 - build_dir=$(mktemp --directory)
 - install_dir=$(mktemp --directory)
-#- test_log=$(mktemp)
 - test_log="solution-${CC}.txt"
-
 script:
-- cmake -H$src_dir/mk/deps -B$build_dir/mk/deps -DCMAKE_INSTALL_PREFIX=$install_dir
-- cmake --build $build_dir/mk/deps
 - cmake -H$src_dir -B$build_dir -DCMAKE_INSTALL_PREFIX=$install_dir -DCMAKE_BUILD_TYPE=Debug -D${SANITIZER}=On
 - cmake --build $build_dir --target all
-
 after_success:
-#- cmake --build $build_dir --target test
 - cd $build_dir && ctest -j -VV --extra-verbose | grep "Solution for day" | tee "$test_log"; test ${PIPESTATUS[0]} -eq 0
-
 deploy:
   provider: releases
   api_key:
     secure: n/EgqevxKRx3+CR46lwtF/CZ5A7qg+WI20lY2+8D7xxfmXzVQmt75Xl59C7f+Ood605KaOgkLyAb7PxoQ1mDACLG8hyvkJJxlolMcUU3ag4ZFuQyMjYesa3vgZc2jHZ0En+FnpiVmOpkMC6D7Fk7i31NOeA2gsp/Fgr+QMZQaaIyxY0E8if7LKqdLk7ix6UsQ+p8m2qGk7exi5hVOWUlWW8bWlDOVjJfwQqUaOsdTcccgBxPRigBt6ylL6PIvOEADK4y7m84L0bxJy1Zy/ynqbrHtG4l2PwoPdqXurBpvN4vIe8Mxz9uvMXu+iH+CI2aFZPpNYJ2EOORHyjB246tI1lgaynNbchHdE8vvIId9W/CJ4Wd9k2rZ6Zw5bhcEkafRT4HokTvqD0cVuW+qXILdHWcVVFnUmjf/OO0J4JpvaYQ+09Hp+49EbdrtXITNm+d4doHG1dBv0xc3Nhg8x5n1zOUmWVacZGNCoEhuS1o3+Ns3EI0I2lBenF6RDPENgChjAbJ+hnt/kI7+8WEEAt5qdHMJRX6e80R9CNPewgktCkb4u03P8Dizp8xUVhiuakivyXZnGrjyMY3HPt9DKpYhCfcqf/z/8tgBtBnkzSKuDxrxFEXy5bKgSlO4UDQ5V1NGexlQILQKgreEW/hpGcu27Cvxm6eluCCraatNrAQBog=
-  file: "$test_log"
+  file: $test_log
   skip_cleanup: true
-  on:
+  true:
     repo: murzz/adventofcode
     tags: true
