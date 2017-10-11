@@ -1,6 +1,8 @@
 dist: trusty
 sudo: false
-language: cpp
+language: generic
+cache:
+  apt: true
 env:
   global:
   - SANITIZER=SANITIZE_ADDRESS
@@ -8,22 +10,21 @@ env:
   - SANITIZER=SANITIZE_THREAD
   - SANITIZER=SANITIZE_UNDEFINED
   matrix:
-    include:
-    - env: COMPILER_NAME=gcc CXX=g++-7 CC=gcc-7
-      addons:
-        apt:
-          sources:
-          - ubuntu-toolchain-r-test
-          packages:
-          - g++-7
-    - env: COMPILER_NAME=clang CXX=clang++-5.0 CC=clang-5.0
-      addons:
-        apt:
-          sources:
-          - ubuntu-toolchain-r-test
-          - llvm-toolchain-trusty-5.0
-          packages:
-          - clang-5.0
+  - env: COMPILER_NAME=gcc CXX=g++-7 CC=gcc-7
+    addons:
+      apt:
+        sources:
+        - ubuntu-toolchain-r-test
+        packages:
+        - g++-7
+  - env: COMPILER_NAME=clang CXX=clang++-5.0 CC=clang-5.0
+    addons:
+      apt:
+        sources:
+        - ubuntu-toolchain-r-test
+        - llvm-toolchain-trusty-5.0
+        packages:
+        - clang-5.0
 before_script:
 - src_dir=$(pwd)
 - build_dir=$(mktemp --directory)
