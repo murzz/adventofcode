@@ -10,9 +10,14 @@ addons:
     - llvm-toolchain-trusty-5.0
     packages:
     - clang-5.0
+    - g++-6
     - g++-7
     - libc++-dev
 env:
+- SANITIZER=SANITIZE_ADDRESS     COMPILER_NAME=gcc   CC=gcc-6     CXX=g++-6
+- SANITIZER=SANITIZE_MEMORY      COMPILER_NAME=gcc   CC=gcc-6     CXX=g++-6
+- SANITIZER=SANITIZE_THREAD      COMPILER_NAME=gcc   CC=gcc-6     CXX=g++-6
+- SANITIZER=SANITIZE_UNDEFINED   COMPILER_NAME=gcc   CC=gcc-6     CXX=g++-6
 - SANITIZER=SANITIZE_ADDRESS     COMPILER_NAME=gcc   CC=gcc-7     CXX=g++-7
 - SANITIZER=SANITIZE_MEMORY      COMPILER_NAME=gcc   CC=gcc-7     CXX=g++-7
 - SANITIZER=SANITIZE_THREAD      COMPILER_NAME=gcc   CC=gcc-7     CXX=g++-7
