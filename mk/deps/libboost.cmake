@@ -1,7 +1,7 @@
 include(ExternalProject)
 
 # tarball
-set(Boost_Version 1.66.1)
+set(Boost_Version 1.65.1)
 set(BOOST_SHA256 9807a5d16566c57fd74fb522764e0b134a8bbe6b6e8967b83afefd30dcd3be81)
 set(BOOST_TARBALL_TYPE .tar.bz2)
 
