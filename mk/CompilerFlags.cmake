@@ -13,5 +13,6 @@ set(CLANG_DISABLED_WARNINGS "${CLANG_DISABLED_WARNINGS} -Wno-missing-prototypes"
 set(CLANG_DISABLED_WARNINGS "${CLANG_DISABLED_WARNINGS} -Wno-missing-braces -Wno-c++98-compat -Wno-c++98-compat-pedantic")                                                                                 
 
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++ -Weverything ${CLANG_DISABLED_WARNINGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Weverything ${CLANG_DISABLED_WARNINGS}")
 endif()
