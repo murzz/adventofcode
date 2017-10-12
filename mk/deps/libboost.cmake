@@ -7,7 +7,7 @@ set(BOOST_TARBALL_TYPE .tar.bz2)
 
 string(REPLACE "." "_" Boost_Version_Underscore ${Boost_Version})
 set(BOOST_URL1 "https://dl.bintray.com/boostorg/release/${Boost_Version}/source/boost_${Boost_Version_Underscore}${BOOST_TARBALL_TYPE}")
-set(BOOST_URL2 "http://sourceforge.net/projects/boost/files/boost/${Boost_Version}/boost_${Boost_Version_Underscore}${BOOST_TARBALL_TYPE}/download")
+#set(BOOST_URL2 "http://sourceforge.net/projects/boost/files/boost/${Boost_Version}/boost_${Boost_Version_Underscore}${BOOST_TARBALL_TYPE}/download")
 
 # modular boost
 set(BOOST_REPO_URL https://github.com/boostorg/boost.git)
@@ -79,9 +79,10 @@ set(BOOST_INSTALL_PARAMS
 set(BOOST_INSTALL_COMMAND ./b2 ${BOOST_INSTALL_PARAMS})
 
 ExternalProject_Add(boost
-#   GIT_REPOSITORY ${BOOST_REPO_URL}
-#   GIT_TAG ${BOOST_TAG}
-    URL "${BOOST_URL1} ${BOOST_URL2}"
+#    GIT_REPOSITORY ${BOOST_REPO_URL}
+#    GIT_TAG ${BOOST_TAG}
+#    URL ${BOOST_URL1} ${BOOST_URL2}
+    URL ${BOOST_URL1}
     URL_HASH SHA256=${BOOST_SHA256}
     CONFIGURE_COMMAND ${BOOST_CONFIGURE_COMMAND}
     BUILD_COMMAND ${BOOST_BUILD_COMMAND}
