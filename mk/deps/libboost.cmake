@@ -6,7 +6,8 @@ set(BOOST_SHA256 9807a5d16566c57fd74fb522764e0b134a8bbe6b6e8967b83afefd30dcd3be8
 set(BOOST_TARBALL_TYPE .tar.bz2)
 
 string(REPLACE "." "_" Boost_Version_Underscore ${Boost_Version})
-set(BOOST_URL "http://sourceforge.net/projects/boost/files/boost/${Boost_Version}/boost_${Boost_Version_Underscore}${BOOST_TARBALL_TYPE}/download")
+set(BOOST_URL1 "https://dl.bintray.com/boostorg/release/${Boost_Version}/source/boost_${Boost_Version_Underscore}${BOOST_TARBALL_TYPE}")
+set(BOOST_URL2 "http://sourceforge.net/projects/boost/files/boost/${Boost_Version}/boost_${Boost_Version_Underscore}${BOOST_TARBALL_TYPE}/download")
 
 # modular boost
 set(BOOST_REPO_URL https://github.com/boostorg/boost.git)
@@ -80,13 +81,13 @@ set(BOOST_INSTALL_COMMAND ./b2 ${BOOST_INSTALL_PARAMS})
 ExternalProject_Add(boost
 #   GIT_REPOSITORY ${BOOST_REPO_URL}
 #   GIT_TAG ${BOOST_TAG}
-    URL ${BOOST_URL}
+    URL ${BOOST_URL1} ${BOOST_URL2}
     URL_HASH SHA256=${BOOST_SHA256}
     CONFIGURE_COMMAND ${BOOST_CONFIGURE_COMMAND}
     BUILD_COMMAND ${BOOST_BUILD_COMMAND}
     BUILD_IN_SOURCE TRUE
     INSTALL_COMMAND ${BOOST_INSTALL_COMMAND}
-#    LOG_DOWNLOAD TRUE
+    LOG_DOWNLOAD TRUE
 #    LOG_UPDATE TRUE
 #    LOG_CONFIGURE TRUE
 #    LOG_BUILD TRUE
