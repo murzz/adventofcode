@@ -39,8 +39,8 @@ script:
 - cmake --build ${BUILD_DIR} --target all
 after_success:
 #- cmake --build ${BUILD_DIR} --target test
-- cd ${BUILD_DIR} && ctest -j -VV --extra-verbose | tee "${TEST_LOG_TMP}"; test ${PIPESTATUS[0]} -eq 0
-- grep "Solution for day" "${TEST_LOG_TMP}" | tee "${TEST_LOG}"; test ${PIPESTATUS[0]} -eq 0
+- cd ${BUILD_DIR} && ctest -j 4 --extra-verbose | tee "${TEST_LOG_TMP}"; test ${PIPESTATUS[0]} -eq 0
+- grep "Solution for day" "${TEST_LOG_TMP}" | sort -k1 | tee "${TEST_LOG}"
 deploy:
   provider: releases
   api_key:
