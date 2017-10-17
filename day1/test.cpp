@@ -6,6 +6,6 @@
 
 using namespace adventofcode::day1;
 
-TEST(day1)
+ADVENT_OF_CODE_TEST(day1)
 
 
