@@ -8,13 +8,13 @@ addons:
     sources:
     - ubuntu-toolchain-r-test
     - llvm-toolchain-trusty-5.0
-    - george-edison55
+    - sourceline: 'ppa:george-edison55/cmake-3.x'
     packages:
     - clang-5.0
     - g++-6
     - g++-7
     - libc++-dev
-    - cmake-3.x
+    - cmake
 env:
 - SANITIZER=SANITIZE_ADDRESS     COMPILER_NAME=gcc   CC=gcc-7     CXX=g++-7
 - SANITIZER=SANITIZE_MEMORY      COMPILER_NAME=gcc   CC=gcc-7     CXX=g++-7
