@@ -3,4 +3,4 @@
 
 using namespace adventofcode::day4;
 
-ADVENT_OF_CODE_FUZZ();
+ADVENT_OF_CODE_FUZZ()
