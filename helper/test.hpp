@@ -123,12 +123,12 @@ struct is_dataset<adventofcode::dataset> : boost::mpl::true_
 }
 
 //TODO: usage of BOOST_TEST_MESSAGE causes `Failure occurred in a following context:` message, WTF?
-#define ADVENT_OF_CODE_TEST(test_case_name)\
-BOOST_DATA_TEST_CASE(test_case_name, adventofcode::dataset(), title, input, output1, output2)\
-{\
-   const auto output = solve(input);\
-   BOOST_CHECK(output.first == output1);\
-   BOOST_CHECK(output.second == output2);\
-   const auto has_2_placeholders = [](const auto & title)->bool{return 4 == std::count(std::begin(title), std::end(title), '%');};\
-   if (has_2_placeholders(title)) {std::cout << boost::format(title) % output.first % output.second << std::endl;}\
+#define ADVENT_OF_CODE_TEST(test_case_name) \
+BOOST_DATA_TEST_CASE(test_case_name, adventofcode::dataset(), title, input, output1, output2) \
+{ \
+   const auto output = solve(input); \
+   BOOST_CHECK(output.first == output1); \
+   BOOST_CHECK(output.second == output2); \
+   const auto has_2_placeholders = [](const auto & title)->bool{return 4 == std::count(std::begin(title), std::end(title), '%');}; \
+   if (has_2_placeholders(title)) {std::cout << boost::format(title) % output.first % output.second << std::endl;} \
 }
