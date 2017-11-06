@@ -8,13 +8,13 @@ addons:
     sources:
     - ubuntu-toolchain-r-test
     - llvm-toolchain-trusty-5.0
-    - sourceline: 'ppa:george-edison55/cmake-3.x'
+#    - sourceline: 'ppa:george-edison55/cmake-3.x'
     packages:
     - clang-5.0
     - g++-6
     - g++-7
     - libc++-dev
-    - cmake
+#    - cmake
 env:
 - SANITIZER=SANITIZE_ADDRESS     COMPILER_NAME=gcc   CC=gcc-7     CXX=g++-7
 - SANITIZER=SANITIZE_MEMORY      COMPILER_NAME=gcc   CC=gcc-7     CXX=g++-7
@@ -34,6 +34,8 @@ script:
 - cmake --version
 - cmake -H${SRC_DIR}/mk/deps -B${BUILD_DIR}/mk/deps -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR}
 - cmake --build ${BUILD_DIR}/mk/deps
+- export PATH=${INSTALL_DIR}/bin:$PATH
+- cmake --version
 - cmake -H${SRC_DIR} -B${BUILD_DIR} -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} -DCMAKE_BUILD_TYPE=Debug -D${SANITIZER}=On
 - cmake --build ${BUILD_DIR} --target all
 after_success:
