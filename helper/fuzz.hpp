@@ -7,5 +7,5 @@ extern "C" int LLVMFuzzerTestOneInput(const unsigned char *data, unsigned long s
 { \
     adventofcode::input_type input(reinterpret_cast<const char*>(data), size); \
     const auto output = solve(input); \
-    return output == adventofcode::output_type(); \
+    return 0; \
 }
