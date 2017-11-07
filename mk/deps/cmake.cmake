@@ -13,10 +13,4 @@ ExternalProject_Add(
         GIT_REPOSITORY ${CMAKE_REPO_URL}
         GIT_TAG ${CMAKE_TAG}
         CMAKE_ARGS ${CMAKE_BUILD_ARGS}
-        LOG_DOWNLOAD TRUE
-        LOG_UPDATE TRUE
-        LOG_CONFIGURE TRUE
-        LOG_BUILD TRUE
-        LOG_TEST TRUE
-        LOG_INSTALL TRUE
 )
